@@ -1,21 +1,76 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Интерактивный график цен</title>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <div class="container">
-        <h1>Анализ торговых данных</h1>
-        <div id="graph"></div>
-        <div class="controls">
-            <button id="toggle-buy">Показать/скрыть BUY</button>
-            <button id="toggle-sell">Показать/скрыть SELL</button>
-        </div>
-    </div>
-    <script src="script.js"></script>
-</body>
-</html>
+import plotly.graph_objects as go
+from datetime import datetime
+import json
+
+# Пример данных (можно загрузить из файла)
+data = [
+    {
+        "symbol_id": "MEXCFTS_PERP_AERGO_USDT",
+        "time_exchange": "2025-04-16T07:47:29.3290000Z",
+        "price": 0.4859,
+        "size": 10,
+        "taker_side": "BUY"
+    },
+    {
+        "symbol_id": "MEXCFTS_PERP_AERGO_USDT",
+        "time_exchange": "2025-04-16T07:47:29.3290000Z",
+        "price": 0.48591,
+        "size": 538,
+        "taker_side": "BUY"
+    },
+    {
+        "symbol_id": "MEXCFTS_PERP_AERGO_USDT",
+        "time_exchange": "2025-04-16T07:47:30.1000000Z",
+        "price": 0.4858,
+        "size": 25,
+        "taker_side": "SELL"
+    }
+]
+
+# Подготовка данных
+times = [datetime.fromisoformat(item["time_exchange"].replace("Z", "")) for item in data]
+prices = [item["price"] for item in data]
+sizes = [item["size"] for item in data]
+sides = [item["taker_side"] for item in data]
+symbols = [item["symbol_id"] for item in data]
+
+# Создание графика
+fig = go.Figure()
+
+# Добавление точек для BUY и SELL
+for side, color in [("BUY", "green"), ("SELL", "red")]:
+    mask = [s == side for s in sides]
+    fig.add_trace(go.Scatter(
+        x=[t for t, m in zip(times, mask) if m],
+        y=[p for p, m in zip(prices, mask) if m],
+        mode='markers',
+        name=side,
+        marker=dict(
+            color=color,
+            size=[s/5 for s, m in zip(sizes, mask) if m],  # Масштабируем размер точек
+            opacity=0.7,
+            line=dict(width=1, color='DarkSlateGrey')
+        ),
+        hoverinfo='text',
+        hovertext=[f"Symbol: {sym}<br>Price: {price}<br>Size: {size}<br>Time: {time}"
+                  for sym, price, size, time, m in zip(symbols, prices, sizes, times, mask) if m]
+    ))
+
+# Настройка внешнего вида
+fig.update_layout(
+    title='Цены по времени (BUY/SELL)',
+    xaxis_title='Время',
+    yaxis_title='Цена',
+    hovermode='closest',
+    template='plotly_white',
+    showlegend=True
+)
+
+# Сохранение в HTML файл
+output_file = "trades_plot.html"
+fig.write_html(output_file)
+print(f"График сохранен в файл: {output_file}")
+
+# Автоматическое открытие в браузере
+import webbrowser
+webbrowser.open(output_file)
