@@ -1,0 +1,85 @@
+:root {
+    --bg-color: #f5f5f5;
+    --text-color: #333;
+    --card-bg: white;
+    --btn-bg: #4CAF50;
+    --btn-hover: #45a049;
+    --shadow: rgba(0,0,0,0.15);
+}
+
+[data-theme="dark"] {
+    --bg-color: #121212;
+    --text-color: #e0e0e0;
+    --card-bg: #1e1e1e;
+    --shadow: rgba(0,0,0,0.5);
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.container {
+    text-align: center;
+    background: var(--card-bg);
+    padding: 40px 60px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px var(--shadow);
+    transition: background 0.3s, box-shadow 0.3s;
+}
+
+h1 {
+    color: var(--text-color);
+    margin-bottom: 30px;
+}
+
+.exchange-buttons {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.exchange-btn {
+    display: block;
+    width: 200px;
+    padding: 20px;
+    background-color: var(--btn-bg);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.exchange-btn:hover {
+    background-color: var(--btn-hover);
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px var(--shadow);
+}
+
+#theme-toggle {
+    margin-top: 10px;
+    padding: 8px 16px;
+    font-size: 16px;
+    background: var(--btn-bg);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#theme-toggle:hover {
+    background: var(--btn-hover);
+}

@@ -4,52 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Exchange Analys</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f5f5f5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-        .container {
-            text-align: center;
-            background: white;
-            padding: 40px 60px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-        }
-        h1 {
-            color: #333;
-            margin-bottom: 30px;
-        }
-        .exchange-buttons {
-            display: flex;
-            gap: 30px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        .exchange-btn {
-            display: block;
-            width: 200px;
-            padding: 20px;
-            background-color: #4CAF50;
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            font-size: 18px;
-            font-weight: bold;
-            transition: background-color 0.3s, transform 0.2s;
-        }
-        .exchange-btn:hover {
-            background-color: #45a049;
-            transform: translateY(-4px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
@@ -58,6 +13,36 @@
             <a href="BINANCE/index.html" class="exchange-btn">BINANCE</a>
             <a href="UPBIT/index.html" class="exchange-btn">UPBIT</a>
         </div>
+        <button id="theme-toggle">🌙 Dark theme</button>
     </div>
+
+    <script>
+        const toggleBtn = document.getElementById('theme-toggle');
+        const body = document.body;
+
+        const savedTheme = localStorage.getItem('theme');
+        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        let currentTheme = 'light';
+        if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
+            currentTheme = 'dark';
+        }
+
+        body.setAttribute('data-theme', currentTheme);
+        updateButtonText();
+
+        toggleBtn.addEventListener('click', () => {
+            currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            body.setAttribute('data-theme', currentTheme);
+            localStorage.setItem('theme', currentTheme);
+            updateButtonText();
+        });
+
+        function updateButtonText() {
+            toggleBtn.textContent = currentTheme === 'dark' 
+                ? '☀️ Dark theme' 
+                : '🌙 Light theme';
+        }
+    </script>
 </body>
 </html>
